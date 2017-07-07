@@ -1,5 +1,5 @@
 # cityPicker
-cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
+cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
 - 1.0.0
@@ -8,20 +8,14 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select两
 - 支持联动
 - 支持搜索功能
 
-<<<<<<< HEAD
 ## 浏览器支持
 - Internet Explorer 7+
-=======
-## 浏览器支持
-- Internet Explorer 8+
->>>>>>> 9bd2f7b6a08c390f2fbce97ee3ecb9a3a4f1cf89
 - Chrome for PC
 - Safari for PC
 - Firefox for  PC
 
 ## 参数
 | 名称 | 类型 | 默认 | 描述 |
-<<<<<<< HEAD
 | --------   | -----:  | :----:  | :----:  |
 | dataJson | Aarray | [] | 城市json数据 |
 | selectpattern | Aarray | [{field:"userProvinceId",placeholder:"请选择省份"},{field:"userCityId",placeholder:"请选择城市"},{field:"userDistrictId",placeholder:"请选择区县"}] | 用于存储的字段名和默认提示 |
@@ -144,5 +138,3 @@ var selector = $('#city-picker-selector').cityPicker();
 
 ## Demo
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
-=======
->>>>>>> 9bd2f7b6a08c390f2fbce97ee3ecb9a3a4f1cf89
