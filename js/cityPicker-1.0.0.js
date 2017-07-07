@@ -275,9 +275,6 @@
                 }
                 
             });
-        },
-        getCityVal: function () {
-            return val;
         }
     };
 
