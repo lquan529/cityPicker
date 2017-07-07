@@ -1,0 +1,128 @@
+@import "base";
+
+body {
+	padding: 5% 10%;
+}
+
+
+h2 {
+	font-size: 26px;
+	margin-top: 50px;
+	margin-bottom: 20px;
+}
+
+/**
+ * 模拟城市选择
+ */
+.city-picker-selector {
+	@extend %clearfix;
+	.selector-item {
+		border: 1px solid #ccc;
+		width: 200px;
+		height: 36px;
+		line-height: 36px;
+		float: left;
+		margin-left: 20px;
+		position: relative;
+		&:first-child {
+			margin-left: 0;
+		}
+		&:after {
+			content: '';
+			border-right: 6px solid transparent;
+			border-left: 6px solid transparent;
+			border-top: 6px solid #ccc;
+			display: block;
+			width: 0;
+			height: 0;
+			position: absolute;
+			top: 15px;
+			right: 5px;
+		}
+	}
+	.selector-name {
+		color: #333;
+		font-size: 16px;
+		display: block;
+		text-indent: 5%;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		&:hover {
+			background-color: #fdfdfd;
+		}
+		&.df-color {
+			color: #999;
+		}
+		&.forbid {
+			cursor: not-allowed;
+		}
+	}
+	.selector-list {
+		border: 1px solid #ccc;
+		background: #fff;
+		width: 100%;
+		position: absolute;
+		top: 36px;
+		left: -1px;
+		z-index: 1;
+	}
+	ul {
+		max-height: 160px;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+	li {
+		border-top: 1px solid #ccc;
+		color: #333;
+		cursor: pointer;
+		width: 90%;
+		padding: 0 5%;
+		height: 30px;
+		line-height: 30px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		&:first-child {
+			border-top: none;
+		}
+		&.caller {
+			&:hover {
+				background: #f5f5f5;
+			}
+			&.active, &.active:hover {
+				background: #3A8EAF;
+				color: #fff;
+			}
+		}
+		&.forbid {
+			color: #999;
+			font-size: 14px;
+			cursor: not-allowed;
+		}
+	}
+	.selector-search {
+		border: 1px solid #ccc;
+		border-top: none;
+		background: #f8f8f8;
+		font-size: 0;
+		padding: 10px;
+		height: 28px;
+		margin-left: -1px;
+		margin-right: -1px;
+	}
+	.input-search {
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		color: #333;
+		font-size: 14px;
+		width: 100%;
+		height: 26px;
+		line-height: 26px\9;
+		padding: 0;
+		text-indent: 5px;
+		&:focus {
+			outline: none;
+		}
+	}
+}
