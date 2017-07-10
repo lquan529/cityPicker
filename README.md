@@ -22,7 +22,7 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 | shorthand | Boolean | flase | 城市名称简写功能 |
 | storage | Boolean | true | 存储的值是数字还是中文 |
 | linkage | Boolean | true | 联动功能 |
-| renderMode | Boolean | 是模拟的还是原生的 |
+| renderMode | Boolean | true | 是模拟的还是原生的 |
 | code | Boolean | false | 是否输出城市区号值, 开启就是您要传字段名('name') |
 | search | Boolean | true | 只在模式是selector才生效, 是否开启搜索功能 |
 | level | Number | 3 | 多少列  默认是一列/级 (3) |
