@@ -34,13 +34,13 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 #### 引入相关文件：
 ```html
 <link rel="stylesheet" type="text/css" href="css/city-picker.css">
-<script src="http://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
+<script src="https://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
 <script type="text/javascript" src="js/citydata.js"></script>
 <script type="text/javascript" src="js/cityPicker-1.0.0.js"></script>
 ```
 
 #### HTML
-> Dom的级列表都是用js动态生成，页面写Dom的时候只要一个class或者ID来调用插件就可以了
+> Dom的级列表都是用js动态生成，页面写Dom的时候只要一个class或者ID来调用插件就可以了
 ```html
 <div class="city-picker-selector" id="city-picker-selector">
     <div class="selector-item storey province">
@@ -108,7 +108,7 @@ var select = $('.city-picker-select').cityPicker({
 ```
 
 ## 事件
-cityPick不同级列表选择后的监听事件。choose-xxx 监听xxx不同列表的name
+cityPick不同级列表选择后的监听事件。choose-xxx监听xxx不同列表的name
 ```js
 $('#city-picker-selector').on('choose-province.citypicker', function(event, tagert, storage) {
     console.log(storage);
