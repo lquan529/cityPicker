@@ -87,7 +87,7 @@ var selector = $('#city-picker-selector').cityPicker({
     renderMode: true,
     search: false,
     linkage: false,
-	keyboard: true
+    keyboard: true
 });
 ```
 
@@ -144,5 +144,5 @@ var selector = $('#city-picker-selector').cityPicker();
 
 ## Log
 - 2017.07.11——版本更新为: v1.1.1  
-增加支持键盘选择事件  
+增加支持键盘选择事件以及控制键盘事件是否开启的参数  
 修复在IE低版本点击不了的报错问题
