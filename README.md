@@ -80,13 +80,14 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 ```
 
 #### JavaScript
-模拟城市-无联动/无搜索
+模拟城市-无联动/无搜索/键盘操作
 ```js
 var selector = $('#city-picker-selector').cityPicker({
     dataJson: cityData,
     renderMode: true,
     search: false,
-    linkage: false
+    linkage: false,
+	keyboard: true
 });
 ```
 
