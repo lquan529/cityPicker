@@ -22,7 +22,7 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 | selectpattern | Aarray | [{field:"userProvinceId",placeholder:"请选择省份"},{field:"userCityId",placeholder:"请选择城市"},{field:"userDistrictId",placeholder:"请选择区县"}] | 用于存储的字段名和默认提示 |
 | shorthand | Boolean | flase | 城市名称简写功能 |
 | storage | Boolean | true | 存储的值是数字还是中文 |
-| linkage | Boolean | true | 联动功能 |
+| autoSelected | Boolean | true | 是否自动选择第一项 |
 | renderMode | Boolean | true | 是模拟的还是原生的 |
 | keyboard | Boolean | false | 是否开启键盘操作事件 |
 | code | Boolean | false | 是否输出城市区号值, 开启就是您要传字段名('name') |
@@ -86,7 +86,7 @@ var selector = $('#city-picker-selector').cityPicker({
     dataJson: cityData,
     renderMode: true,
     search: false,
-    linkage: false,
+    autoSelected: false,
     keyboard: true
 });
 ```
@@ -97,7 +97,7 @@ $('#city-picker-search').cityPicker({
     dataJson: cityData,
     renderMode: true,
     search: true,
-    linkage: true
+    autoSelected: true
 });
 ```
 
@@ -106,7 +106,7 @@ $('#city-picker-search').cityPicker({
 var select = $('.city-picker-select').cityPicker({
     dataJson: cityData,
     renderMode: false,
-    linkage: false
+    autoSelected: false
 });
 ```
 
