@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-1.0.0
+ * v-1.1.0
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
@@ -124,7 +124,7 @@
         obtain: function (event) {
             var self = this,
                 config = self.options,
-                $target = $(event.target),
+                $target = event.target ? $(event.target) : $(event),
                 $parent = $target.parents('.listing'),
                 index = config.renderMode ? $target.parents('.storey').data('index') : $target.data('index'),
                 id = config.renderMode ? $target.attr('data-id') : $target.val(),
@@ -146,8 +146,10 @@
 
             if (config.renderMode) {
                 //模拟: 添加选中的样式
-                $parent.find('.caller').removeClass('active');
-                $target.addClass('active');
+                if (!$parent.find('.caller').hasClass('active')) {
+                    $parent.find('.caller').removeClass('active');
+                    $target.addClass('active');
+                }
 
                 //给选中的级-添加值和文字
                 $parent.siblings('.reveal').removeClass('df-color forbid').text(name).siblings('.input-price').val(storage);
@@ -180,29 +182,91 @@
             effect.obtain.apply(this, $target);
 
             $selector.find('.listing').addClass('hide');
+
+            return false;
         },
         search: function (event) {
+            event.preventDefault();
             var self = this,
                 $target = $(event.target),
                 $parent = $target.parents('.listing'),
                 inputVal = $target.val(),
                 id = $parent.data('id'),
+                keycode = event.keyCode,
                 result = [];
 
             //如果是按下shift/ctr/左右/command键不做事情
-            if (event.keyCode === 16 || event.keyCode === 17 || event.keyCode === 18 || event.keyCode === 37 || event.keyCode === 39 || event.keyCode === 91 || event.keyCode === 93) {
+            if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 37 || keycode === 39 || keycode === 91 || keycode === 93) {
                 return false;
             }
 
-            $.each(this.options.dataJson, function(key, value) {
-                //拼音或者名称搜索
-                if(value.pinyin.toLocaleLowerCase().search(inputVal) > -1 || value.name.search(inputVal) > -1 || value.id.search(inputVal) > -1 ){
-                    result.push(value);
+            //如果不是按下enter/上下键的就做搜索事情
+            if (keycode !== 13 && keycode !== 38 && keycode !== 40) {
+                $.each(this.options.dataJson, function(key, value) {
+                    //拼音或者名称搜索
+                    if(value.pinyin.toLocaleLowerCase().search(inputVal) > -1 || value.name.search(inputVal) > -1 || value.id.search(inputVal) > -1 ){
+                        result.push(value);
+                    }
+                });
+
+                $parent.find('ul').html(effect.montage.apply(self, [result, id]));
+            }
+        },
+        operation: function (event) {
+            event.preventDefault();
+            var $target = $(event.target),
+                $sibl = $target.hasClass('input-search') ? $target.parents('.listing') : $target.siblings('.listing'),
+                $items = $sibl.find('.caller'),
+                keyCode = event.keyCode,
+                index = 0,
+                direction,
+                itemIndex;
+            
+            //按下enter键
+            if (keyCode === 13) {
+                effect.hide.apply(this, $sibl.find('.caller.active'));
+                return false;
+            }
+            
+            //按下上下键
+            if (keyCode === 38 || keyCode === 40) {
+
+                //方向
+                direction = keyCode === 38 ? -1 : 1;
+                //选中的索引
+                itemIndex = $items.index($sibl.find('.caller.active'));
+
+                if (itemIndex < 0) {
+                    index = direction > 0 ? -1 : 0;
+                } else {
+                    index = itemIndex;
                 }
-            });
 
-            $parent.find('ul').html(effect.montage.apply(self, [result, id]));
+                //键盘去选择的索引
+                index = index + direction;
 
+                //循环选择
+                index = index === $items.length ? 0 : index;
+
+                $items.removeClass('active').eq(index).addClass('active');
+
+                //滚动条跟随定位
+                effect.position.call(this, $sibl);
+            }
+
+            return false;
+        },
+        position: function (event) {
+            var $target = event,
+                $caller = $target.find('.caller.active'),
+                oh = $target.outerHeight(),
+                ch = $caller.outerHeight(),
+                dy = $caller.position().top,
+                sy = $target.find('ul').scrollTop();
+
+            $target.find('ul').animate({
+                scrollTop: dy + ch - oh + sy
+            }, 200);
         }
     };
 
@@ -234,6 +298,7 @@
 
             //点击显示对应的列表
             $selector.on('click.citypicker', '.reveal', function (event) {
+                event.preventDefault();
                 var $this = $(this);
 
                 if ($this.is('.forbid')) {
@@ -244,6 +309,8 @@
                 }
 
                 effect.show.apply(self, $this);
+
+                return false;
             });
 
             //点击选项事件
@@ -254,6 +321,9 @@
 
             //文本框搜索事件
             $selector.on('keyup.citypicker', '.input-search', $.proxy(effect.search, self));
+
+            //键盘选择事件
+            $selector.on('keyup.citypicker', '.storey', $.proxy(effect.operation, self));
         },
         setCityVal: function (val) {
             var self = this,
