@@ -92,12 +92,13 @@
 	<script type="text/javascript">
 		$(function () {
 
-			//模拟城市-无联动/无搜索
+			//模拟城市-无联动/无搜索/键盘操作
 			var selector = $('#city-picker-selector').cityPicker({
 				dataJson: cityData,
 				renderMode: true,
 				search: false,
-				linkage: false
+				linkage: false,
+				keyboard: true
 			})
 			$('#city-picker-selector').on('choose-province.citypicker', function(event, tagert, storage) {
 				console.log(storage);
