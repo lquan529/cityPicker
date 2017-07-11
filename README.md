@@ -2,11 +2,12 @@
 cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
-- 1.0.0
+- 1.1.0
 
 ## 功能支持
 - 支持联动
 - 支持搜索功能
+- 支持键盘选择功能
 
 ## 浏览器支持
 - Internet Explorer 7+
@@ -138,3 +139,7 @@ var selector = $('#city-picker-selector').cityPicker();
 
 ## Demo
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
+
+## Log
+- 2017.07.11——版本更新为: v1.1.0  
+增加支持键盘选择事件
