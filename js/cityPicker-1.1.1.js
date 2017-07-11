@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-1.1.0
+ * v-1.1.1
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
@@ -124,7 +124,7 @@
         obtain: function (event) {
             var self = this,
                 config = self.options,
-                $target = event.target ? $(event.target) : $(event),
+                $target = config.renderMode ? event[0].target ? $(event[0].target) : $(event) : $(event.target),
                 $parent = $target.parents('.listing'),
                 index = config.renderMode ? $target.parents('.storey').data('index') : $target.data('index'),
                 id = config.renderMode ? $target.attr('data-id') : $target.val(),
@@ -150,6 +150,8 @@
                     $parent.find('.caller').removeClass('active');
                     $target.addClass('active');
                 }
+
+                config.search ? $parent.find('.input-search').blur() : '';
 
                 //给选中的级-添加值和文字
                 $parent.siblings('.reveal').removeClass('df-color forbid').text(name).siblings('.input-price').val(storage);
@@ -179,7 +181,7 @@
             var config = this.options,
                 $target = $(event);
 
-            effect.obtain.apply(this, $target);
+            effect.obtain.call(this, $target);
 
             $selector.find('.listing').addClass('hide');
 
@@ -224,7 +226,7 @@
             
             //按下enter键
             if (keyCode === 13) {
-                effect.hide.apply(this, $sibl.find('.caller.active'));
+                effect.hide.call(this, $sibl.find('.caller.active'));
                 return false;
             }
             
@@ -308,7 +310,7 @@
                     return false;
                 }
 
-                effect.show.apply(self, $this);
+                effect.show.call(self, $this);
 
                 return false;
             });
