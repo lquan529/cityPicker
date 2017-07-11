@@ -97,7 +97,7 @@
 				dataJson: cityData,
 				renderMode: true,
 				search: false,
-				linkage: false,
+				autoSelected: false,
 				keyboard: true
 			})
 			$('#city-picker-selector').on('choose-province.citypicker', function(event, tagert, storage) {
@@ -121,14 +121,14 @@
 				dataJson: cityData,
 				renderMode: true,
 				search: true,
-				linkage: true
+				autoSelected: true
 			});
 
 			//原生城市-无联动
 			var select = $('.city-picker-select').cityPicker({
 				dataJson: cityData,
 				renderMode: false,
-				linkage: false
+				autoSelected: false
 			});
 
 			//设置城市
