@@ -7,6 +7,7 @@
  * storage			[Boolean]					存储的值是数字还是中文，默认是(true)数字
  * linkage          [Boolean]                   是否联动，默认(true)
  * renderMode		[Boolean]					是模拟的还是原生的;只在type是selector才有效,默认是(true)模拟
+ * keyboard         [Boolean]                   是否开启键盘操作事件，默认(false)
  * code				[Boolean]					是否输出城市区号值，默认(false)，开启就是传字段名('code')
  * search           [Boolean]                   是否开启搜索功能，默认（true）
  * level			[Number]					多少列  默认是一列/级 (3)
@@ -38,6 +39,7 @@
         storage: true,
         linkage: true,
         renderMode: true,
+        keyboard: false,
         code: false,
         search: true,
         level: 3,
@@ -324,8 +326,11 @@
             //文本框搜索事件
             $selector.on('keyup.citypicker', '.input-search', $.proxy(effect.search, self));
 
-            //键盘选择事件
-            $selector.on('keyup.citypicker', '.storey', $.proxy(effect.operation, self));
+            //开启键盘操作
+            if (config.keyboard) {
+                //键盘选择事件
+                $selector.on('keyup.citypicker', '.storey', $.proxy(effect.operation, self));
+            }
         },
         setCityVal: function (val) {
             var self = this,
