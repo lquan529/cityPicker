@@ -5,7 +5,7 @@
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
  * storage			[Boolean]					存储的值是数字还是中文，默认是(true)数字
- * linkage          [Boolean]                   是否联动，默认(true)
+ * autoSelected     [Boolean]                   是否自动选择第一项，默认(true)
  * renderMode		[Boolean]					是模拟的还是原生的;只在type是selector才有效,默认是(true)模拟
  * keyboard         [Boolean]                   是否开启键盘操作事件，默认(false)
  * code				[Boolean]					是否输出城市区号值，默认(false)，开启就是传字段名('code')
@@ -37,7 +37,7 @@
         ],
         shorthand: false,
         storage: true,
-        linkage: true,
+        autoSelected: true,
         renderMode: true,
         keyboard: false,
         code: false,
@@ -135,7 +135,7 @@
                 code = config.renderMode ? $target.data('code') : $target.find('.caller:selected').data('code'),
                 placeholder = index+1 < config.level ? config.selectpattern[index+1].placeholder : '',
                 placeStr = !config.renderMode ? '<option class="caller">'+placeholder+'</option>'+ effect.montage.apply(self, [config.dataJson, id]) : '<li class="caller hide">'+placeholder+'</li>'+ effect.montage.apply(self, [config.dataJson, id]),
-                linkage = !config.linkage ? placeStr : effect.montage.apply(self, [config.dataJson, id]),
+                autoSelectedStr = !config.autoSelected ? placeStr : effect.montage.apply(self, [config.dataJson, id]),
                 $storey = $selector.find('.storey').eq(index + 1),
                 $listing = $selector.find('.listing').eq(index + 1);
                 $selector = self.$selector;
@@ -157,15 +157,15 @@
 
                 //给选中的级-添加值和文字
                 $parent.siblings('.reveal').removeClass('df-color forbid').text(name).siblings('.input-price').val(storage);
-                $listing.data('id', id).find('ul').html(linkage).find('.caller').eq(0).trigger('click');
+                $listing.data('id', id).find('ul').html(autoSelectedStr).find('.caller').eq(0).trigger('click');
 
-                if (!config.linkage) {
+                if (!config.autoSelected) {
                     $storey.find('.reveal').text(placeholder).addClass('df-color').siblings('.input-price').val('');
                     $listing.find('.caller').eq(0).remove();
                 }
             } else {
                 //原生: 下一级附上对应的城市选项，执行点击事件
-				$target.next().html(linkage).trigger('change').find('.caller').eq(0).prop('selected', true);
+				$target.next().html(autoSelectedStr).trigger('change').find('.caller').eq(0).prop('selected', true);
             }
         },
         show: function (event) {
