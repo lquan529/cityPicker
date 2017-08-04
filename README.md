@@ -30,7 +30,7 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 | level | Number | 3 | 多少列  默认是一列/级 (3) |
 | onInitialized | Attachable | function(){} | 组件初始化后触发的回调函数 |
 | onClickBefore | Attachable | function(){} | 组件点击显示列表触发的回调函数(除原生select) |
-| onForbid | Attachable | function(){} | 存在class名forbid的禁止点击的回调 |
+| onForbid | Attachable | function(){} | 存在class名forbid的只读点击的回调(状态为readonly) |
 
 ## 使用方法
 #### 引入相关文件：

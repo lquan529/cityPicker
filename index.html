@@ -97,7 +97,10 @@
 				dataJson: cityData,
 				renderMode: true,
 				search: false,
-				autoSelected: false
+				autoSelected: false,
+				onForbid: function() {
+					console.log(this)
+				}
 			});
 
 			// 省份选择的回调
@@ -126,6 +129,8 @@
 				'id': '110108',
 				'name': '海淀区'
 			}]);
+
+			selector.changeStatus('readonly');
 
 			//模拟城市-联动/搜索/键盘操作
 			$('#city-picker-search').cityPicker({
