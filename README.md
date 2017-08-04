@@ -2,7 +2,7 @@
 cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
-- 1.1.1
+- 1.1.2
 
 ## 功能支持
 - 支持联动
@@ -113,8 +113,19 @@ var select = $('.city-picker-select').cityPicker({
 ## 事件
 cityPick不同级列表选择后的监听事件。choose-xxx监听xxx不同列表的name
 ```js
-$('#city-picker-selector').on('choose-province.citypicker', function(event, tagert, storage) {
-    console.log(storage);
+// 省份选择的回调
+$('#city-picker-selector').on('choose-province.citypicker', function(event, tagert, values) {
+    console.log(values);
+});
+
+// 城市选择的回调
+$('#city-picker-selector').on('choose-city.citypicker', function(event, tagert, values) {
+    console.log(values);
+});
+
+// 城市选择的回调
+$('#city-picker-selector').on('choose-district.citypicker', function(event, tagert, values) {
+    console.log(values);
 });
 ```
 
@@ -139,10 +150,30 @@ var selector = $('#city-picker-selector').cityPicker();
     }]);
 ```
 
+### 状态
+changeStatus(status)
+
+| 参数 | 类型 | 描述 |
+| --------   | -----:  | :----:  |
+| status | String | 参数readonly或者disabled |
+
+`注意：原生select是没有readonly的，如果设置这个是不起作用`
+
+### 绑定
+bindEvent()
+
+### 销毁
+unBindEvent()
+
 ## Demo
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
-- 2017.07.11——版本更新为: v1.1.1  
+- 2017.8.04 —— 版本更新为: v1.1.2  
+增加表单接口bindEvent、销毁接口unBindEvent和只读禁止接口changeStatus；  
+修复了点击选择后，没有添加选中样式的问题；  
+优化了一些逻辑代码，选择的回调返回的参数storage更名为values, 用数组的方式返回ID和名称
+
+- 2017.07.11 —— 版本更新为: v1.1.1  
 增加支持键盘选择事件以及控制键盘事件是否开启的参数  
 修复在IE低版本点击不了的报错问题

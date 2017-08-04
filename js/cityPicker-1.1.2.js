@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-1.1.1
+ * v-1.1.2
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
@@ -53,7 +53,7 @@
         this.$selector = $selector = $(selector);
 
         this.init();
-        this.events();
+        this.bindEvent();
     }
 
     //功能模块函数
@@ -138,21 +138,17 @@
                 autoSelectedStr = !config.autoSelected ? placeStr : effect.montage.apply(self, [config.dataJson, id]),
                 $storey = $selector.find('.storey').eq(index + 1),
                 $listing = $selector.find('.listing').eq(index + 1);
-                $selector = self.$selector;
+                $selector = self.$selector,
+                values = [id || '0', name];
 
             //选择选项后触发自定义事件choose(选择)事件
-            $selector.trigger('choose-' + grade[index] +'.citypicker', [$target, storage]);
+            $selector.trigger('choose-' + grade[index] +'.citypicker', [$target, values]);
 
             //赋值给隐藏域-区号
             $selector.find('[role="code"]').val(code);
 
             if (config.renderMode) {
-                //模拟: 添加选中的样式
-                if (!$parent.find('.caller').hasClass('active')) {
-                    $parent.find('.caller').removeClass('active');
-                    $target.addClass('active');
-                }
-
+                
                 config.search ? $parent.find('.input-search').blur() : '';
 
                 //给选中的级-添加值和文字
@@ -163,6 +159,10 @@
                     $storey.find('.reveal').text(placeholder).addClass('df-color').siblings('.input-price').val('');
                     $listing.find('.caller').eq(0).remove();
                 }
+
+                //模拟: 添加选中的样式
+                $parent.find('.caller').removeClass('active');
+                $target.addClass('active');
             } else {
                 //原生: 下一级附上对应的城市选项，执行点击事件
 				$target.next().html(autoSelectedStr).trigger('change').find('.caller').eq(0).prop('selected', true);
@@ -174,7 +174,7 @@
             $selector = this.$selector;
 
             $selector.find('.listing').addClass('hide');
-            $target.siblings('.listing').removeClass('hide');
+            $target.siblings('.listing').removeClass('hide').find('.input-search').focus();
 
             //点击的回调函数
             config.onClickBefore.call($target);
@@ -296,7 +296,7 @@
             //初始化后的回调函数
             config.onInitialized.call(self);
         },
-        events: function () {
+        bindEvent: function () {
             var self = this,
                 config = self.options;
 
@@ -332,6 +332,21 @@
                 $selector.on('keyup.citypicker', '.storey', $.proxy(effect.operation, self));
             }
         },
+        unBindEvent: function (event) {
+            var self = this,
+                config = self.options;
+
+            $selector.off('click.citypicker', '.reveal');
+
+            $selector.off('click.citypicker', '.caller');
+
+            $selector.off('keyup.citypicker', '.input-search');
+
+            $selector.off('keyup.citypicker', '.storey');
+
+            !config.renderMode ? $selector.off('change.citypicker', 'select') : '';
+
+        },
         setCityVal: function (val) {
             var self = this,
                 config = self.options,
@@ -352,6 +367,20 @@
                 }
                 
             });
+        },
+        changeStatus: function (status) {
+            var self = this,
+                config = self.options;
+
+            if (status === 'readonly') {
+                self.$selector.find('.reveal').addClass('forbid').siblings('.input-price').prop('readonly', true);
+            } else if (status === 'disabled') {
+                self.$selector.find('.reveal').addClass('disabled').siblings('.input-price').prop('disabled', true);
+
+                !config.renderMode ? self.$selector.find('select').prop('disabled', true) : '';
+            }
+
+            config.renderMode && status !== 'readonly' ? self.unBindEvent() : '';
         }
     };
 

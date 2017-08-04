@@ -8,7 +8,7 @@
 </head>
 
 <body>
-	<h2>模拟城市-无联动/无搜索/键盘操作</h2>
+	<h2>模拟城市-无联动/无搜索</h2>
 	<div class="city-picker-selector" id="city-picker-selector">
 		<div class="selector-item storey province">
 			<a href="javascript:;" class="selector-name reveal">北京市</a>
@@ -44,7 +44,7 @@
 	</div>
 	<!-- end .city-picker-selector -->
 
-	<h2>模拟城市-联动/搜索</h2>
+	<h2>模拟城市-联动/搜索/键盘操作</h2>
 	<div class="city-picker-selector" id="city-picker-search">
 		<div class="selector-item storey province">
 			<a href="javascript:;" class="selector-name reveal df-color ">请选择省份</a>
@@ -88,20 +88,31 @@
 
 	<script src="https://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
 	<script type="text/javascript" src="js/citydata.js"></script>
-	<script type="text/javascript" src="js/cityPicker-1.1.1.js"></script>
+	<script type="text/javascript" src="js/cityPicker-1.1.2.js"></script>
 	<script type="text/javascript">
 		$(function () {
 
-			//模拟城市-无联动/无搜索/键盘操作
+			//模拟城市-无联动/无搜索
 			var selector = $('#city-picker-selector').cityPicker({
 				dataJson: cityData,
 				renderMode: true,
 				search: false,
-				autoSelected: false,
-				keyboard: true
-			})
-			$('#city-picker-selector').on('choose-province.citypicker', function(event, tagert, storage) {
-				console.log(storage);
+				autoSelected: false
+			});
+
+			// 省份选择的回调
+			$('#city-picker-selector').on('choose-province.citypicker', function(event, tagert, values) {
+				console.log(values);
+			});
+
+			// 城市选择的回调
+			$('#city-picker-selector').on('choose-city.citypicker', function(event, tagert, values) {
+				console.log(values);
+			});
+
+			// 城市选择的回调
+			$('#city-picker-selector').on('choose-district.citypicker', function(event, tagert, values) {
+				console.log(values);
 			});
 
 			//设置城市
@@ -116,12 +127,28 @@
 				'name': '海淀区'
 			}]);
 
-			//模拟城市-联动/搜索
+			//模拟城市-联动/搜索/键盘操作
 			$('#city-picker-search').cityPicker({
 				dataJson: cityData,
 				renderMode: true,
 				search: true,
-				autoSelected: true
+				autoSelected: true,
+				keyboard: true
+			});
+
+			// 省份选择的回调
+			$('#city-picker-search').on('choose-province.citypicker', function(event, tagert, values) {
+				console.log(values);
+			});
+
+			// 城市选择的回调
+			$('#city-picker-search').on('choose-city.citypicker', function(event, tagert, values) {
+				console.log(values);
+			});
+
+			// 城市选择的回调
+			$('#city-picker-search').on('choose-district.citypicker', function(event, tagert, values) {
+				console.log(values);
 			});
 
 			//原生城市-无联动
@@ -142,6 +169,7 @@
 				'id': '140105',
 				'name': '小店区'
 			}]);
+
 		});
 	</script>
 </body>
