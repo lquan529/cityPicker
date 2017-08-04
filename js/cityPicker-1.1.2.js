@@ -336,6 +336,11 @@
             var self = this,
                 config = self.options;
 
+            if (!config.renderMode) {
+                $selector.off('change.citypicker', 'select');
+                return false;
+            }
+
             $selector.off('click.citypicker', '.reveal');
 
             $selector.off('click.citypicker', '.caller');
@@ -343,8 +348,6 @@
             $selector.off('keyup.citypicker', '.input-search');
 
             $selector.off('keyup.citypicker', '.storey');
-
-            !config.renderMode ? $selector.off('change.citypicker', 'select') : '';
 
         },
         setCityVal: function (val) {
