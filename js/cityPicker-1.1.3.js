@@ -81,7 +81,7 @@
                         html += '<li class="caller" data-id="' + data[i].id + '" data-title="' + reverse + '" ' + code + '>' + name + '</li>';
                     } else {
                         //原生
-                        html += '<option class="caller" value="' + storage + '" data-title="' + reverse + '" ' + code + '>' + name + '</option>';
+                        html += '<option class="caller" value="' + storage + '" data-id="' + data[i].id + '" data-title="' + reverse + '" ' + code + '>' + name + '</option>';
                     }
                 }
             }
@@ -129,7 +129,7 @@
                 $target = config.renderMode ? event[0].target ? $(event[0].target) : $(event) : $(event.target),
                 $parent = $target.parents('.listing'),
                 index = config.renderMode ? $target.parents('.storey').data('index') : $target.data('index'),
-                id = config.renderMode ? $target.attr('data-id') : $target.val(),
+                id = config.renderMode ? $target.attr('data-id') : $target.find('.caller:selected').attr('data-id'),
                 name = config.shorthand ? $target.data('title') : $target.text(), //开启了简写就拿简写，否则就拿全称中文
                 storage = config.storage ? id : name, //存储的是数字还是中文
                 code = config.renderMode ? $target.data('code') : $target.find('.caller:selected').data('code'),
@@ -366,7 +366,7 @@
                     $original.find('.caller[data-id="'+value.id+'"]').addClass('active');
                 } else {
                     $forward.html(effect.montage.apply(self, [config.dataJson, value.id]));
-                    $original.find('.caller[value="'+value.id+'"]').prop('selected', true);
+                    $original.find('.caller[data-id="'+value.id+'"]').prop('selected', true);
                 }
                 
             });

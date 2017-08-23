@@ -2,7 +2,7 @@
 cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
-- 1.1.2
+- 1.1.3
 
 ## 功能支持
 - 支持联动
@@ -169,8 +169,12 @@ unBindEvent()
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
+- 2017.8.23 —— 版本更新为: v1.1.3  
+修复storage为false的时候，选择和设置默认值的时候显示出错的问题
+
+
 - 2017.8.04 —— 版本更新为: v1.1.2  
-增加表单接口bindEvent、销毁接口unBindEvent和只读禁止接口changeStatus；  
+增加绑定事件bindEvent、销毁事件unBindEvent和只读禁止接口changeStatus；  
 修复了点击选择后，没有添加选中样式的问题；  
 增加显示列表的动画；  
 优化了一些逻辑代码，选择的回调返回的参数storage更名为values, 用数组的方式返回ID和名称
