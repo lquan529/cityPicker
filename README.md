@@ -2,7 +2,7 @@
 cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
-- 1.1.3
+- 1.1.4
 
 ## 功能支持
 - 支持联动
@@ -150,6 +150,9 @@ var selector = $('#city-picker-selector').cityPicker();
     }]);
 ```
 
+### 获取值
+getCityVal()
+
 ### 状态
 changeStatus(status)
 
@@ -169,6 +172,10 @@ unBindEvent()
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
+- 2017.9.12 —— 版本更新为: v1.1.4  
+增加getCityVal 获取值的接口
+
+
 - 2017.8.23 —— 版本更新为: v1.1.3  
 修复storage为false的时候，选择和设置默认值的时候显示出错的问题
 

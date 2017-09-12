@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-1.1.2
+ * v-1.1.4
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
@@ -51,6 +51,8 @@
     function Citypicker(options, selector) {
         this.options = $.extend({}, defaults, options);
         this.$selector = $selector = $(selector);
+        this.values = [];
+        this.province = this.city = this.district = '';
 
         this.init();
         this.bindEvent();
@@ -63,7 +65,7 @@
                 config = self.options,
                 leng = data.length,
                 html = '',
-                code, name, reverse, storage;
+                code, name, storage;
 
             for (var i = 0; i < leng; i++) {
                 if (data[i].parentId === pid) {
@@ -71,17 +73,15 @@
                     code = config.code && data[i].cityCode !== '' ? 'data-code=' + data[i].cityCode : '';
                     //判断是否开启了简写，是就用输出简写，否则就输出全称
                     name = config.shorthand ? data[i].shortName : data[i].name;
-                    //反向：判断是否开启了简写，是就用输出简写，否则就输出全称
-                    reverse = !config.shorthand ? data[i].shortName : data[i].name;
                     //存储的是数字还是中文
                     storage = config.storage ? data[i].id : name;
 
                     if (config.renderMode) {
                         //模拟
-                        html += '<li class="caller" data-id="' + data[i].id + '" data-title="' + reverse + '" ' + code + '>' + name + '</li>';
+                        html += '<li class="caller" data-id="' + data[i].id + '" data-title="' + name + '" ' + code + '>' + name + '</li>';
                     } else {
                         //原生
-                        html += '<option class="caller" value="' + storage + '" data-id="' + data[i].id + '" data-title="' + reverse + '" ' + code + '>' + name + '</option>';
+                        html += '<option class="caller" value="' + storage + '" data-id="' + data[i].id + '" data-title="' + name + '" ' + code + '>' + name + '</option>';
                     }
                 }
             }
@@ -128,18 +128,31 @@
                 config = self.options,
                 $target = config.renderMode ? event[0].target ? $(event[0].target) : $(event) : $(event.target),
                 $parent = $target.parents('.listing'),
+                $selected = $target.find('.caller:selected'),
                 index = config.renderMode ? $target.parents('.storey').data('index') : $target.data('index'),
-                id = config.renderMode ? $target.attr('data-id') : $target.find('.caller:selected').attr('data-id'),
-                name = config.shorthand ? $target.data('title') : $target.text(), //开启了简写就拿简写，否则就拿全称中文
+                id = config.renderMode ? $target.attr('data-id') : $selected.attr('data-id'),
+                name = config.renderMode ? $target.text() : $selected.text(),
                 storage = config.storage ? id : name, //存储的是数字还是中文
-                code = config.renderMode ? $target.data('code') : $target.find('.caller:selected').data('code'),
+                code = config.renderMode ? $target.data('code') : $selected.data('code'),
                 placeholder = index+1 < config.level ? config.selectpattern[index+1].placeholder : '',
                 placeStr = !config.renderMode ? '<option class="caller">'+placeholder+'</option>'+ effect.montage.apply(self, [config.dataJson, id]) : '<li class="caller hide">'+placeholder+'</li>'+ effect.montage.apply(self, [config.dataJson, id]),
                 autoSelectedStr = !config.autoSelected ? placeStr : effect.montage.apply(self, [config.dataJson, id]),
                 $storey = $selector.find('.storey').eq(index + 1),
-                $listing = $selector.find('.listing').eq(index + 1);
+                $listing = $selector.find('.listing').eq(index + 1),
                 $selector = self.$selector,
-                values = [id || '0', name];
+                values = { 'id': id || '0', 'name': name };
+
+            // 存储选择的值
+            if (index === 0) {
+                self.province = '';
+                self.province = values;
+            } else if (index === 1) {
+                self.city = '';
+                self.city = values;
+            } else if (index === 2) {
+                self.district = '';
+                self.district = values;
+            }
 
             //选择选项后触发自定义事件choose(选择)事件
             $selector.trigger('choose-' + grade[index] +'.citypicker', [$target, values]);
@@ -355,6 +368,8 @@
                 config = self.options,
                 arrayVal = val;
 
+            self.values = [];
+
             $.each(arrayVal, function (key, value) {
                 var $original = $selector.find('.'+grade[key]);
                 var $forward = $selector.find('.'+grade[key+1]);
@@ -368,8 +383,23 @@
                     $forward.html(effect.montage.apply(self, [config.dataJson, value.id]));
                     $original.find('.caller[data-id="'+value.id+'"]').prop('selected', true);
                 }
+
+                // 存储选择的值
+                self.values.push({ 'id': value.id, 'name': value.name });
                 
             });
+        },
+        getCityVal: function () {
+            var self = this,
+                $selector = self.$selector,
+                id = $selector;
+
+            if (self.province) {
+                self.values = [];
+                self.values.push(self.province, self.city, self.district);
+            }
+            
+            return self.values;
         },
         changeStatus: function (status) {
             var self = this,
