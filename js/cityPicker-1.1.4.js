@@ -126,6 +126,7 @@
         obtain: function (event) {
             var self = this,
                 config = self.options,
+                $selector = self.$selector,
                 $target = config.renderMode ? event[0].target ? $(event[0].target) : $(event) : $(event.target),
                 $parent = $target.parents('.listing'),
                 $selected = $target.find('.caller:selected'),
@@ -139,7 +140,6 @@
                 autoSelectedStr = !config.autoSelected ? placeStr : effect.montage.apply(self, [config.dataJson, id]),
                 $storey = $selector.find('.storey').eq(index + 1),
                 $listing = $selector.find('.listing').eq(index + 1),
-                $selector = self.$selector,
                 values = { 'id': id || '0', 'name': name };
 
             // 存储选择的值
