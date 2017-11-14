@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-1.1.4
+ * v-1.1.5
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
@@ -234,6 +234,7 @@
             var $target = $(event.target),
                 $sibl = $target.hasClass('input-search') ? $target.parents('.listing') : $target.siblings('.listing'),
                 $items = $sibl.find('.caller'),
+                inputVal = $sibl.find('.input-search').val(),
                 keyCode = event.keyCode,
                 index = 0,
                 direction,
@@ -241,6 +242,8 @@
             
             //按下enter键
             if (keyCode === 13) {
+                if (!$items.hasClass('active')) { return false; }
+
                 effect.hide.call(this, $sibl.find('.caller.active'));
                 return false;
             }

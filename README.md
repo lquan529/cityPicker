@@ -2,7 +2,7 @@
 cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
-- 1.1.4
+- 1.1.5
 
 ## 功能支持
 - 支持联动
@@ -172,6 +172,9 @@ unBindEvent()
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
+- 2017.9.12 —— 版本更新为: v1.1.5  
+修复搜索时不选择按下回车键报错问题
+
 - 2017.9.12 —— 版本更新为: v1.1.4  
 增加getCityVal 获取值的接口
 
