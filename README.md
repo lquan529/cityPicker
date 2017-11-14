@@ -172,7 +172,7 @@ unBindEvent()
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
-- 2017.9.12 —— 版本更新为: v1.1.5  
+- 2017.11.14 —— 版本更新为: v1.1.5  
 增加城市数据压缩版本  
 修复搜索时不选择按下回车键报错问题
 
