@@ -88,16 +88,17 @@
 
 	<script src="https://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
 	<script type="text/javascript" src="js/citydata.min.js"></script>
-	<script type="text/javascript" src="js/cityPicker-1.1.5.js"></script>
+	<script type="text/javascript" src="js/cityPicker-1.1.6.js"></script>
 	<script type="text/javascript">
 		$(function () {
 
-			//模拟城市-无联动/无搜索
+			// 模拟城市-无联动/无搜索
 			var selector = $('#city-picker-selector').cityPicker({
 				dataJson: cityData,
 				renderMode: true,
 				search: false,
 				autoSelected: false,
+				code: 'cityCode',
 				onForbid: function() {
 					console.log(this)
 				}
@@ -118,22 +119,13 @@
 				console.log(values);
 			});
 
-			//设置城市
-			selector.setCityVal([{
-				'id': '110000',
-				'name': '北京市'
-			}, {
-				'id': '110100',
-				'name': '北京市'
-			}, {
-				'id': '110108',
-				'name': '海淀区'
-			}]);
+			// 设置城市
+			selector.setCityVal('广东省, 广州市, 天河区');
 
 			// 获取值
-			console.log(JSON.stringify(selector.getCityVal()));
+			console.log('模拟-'+ JSON.stringify(selector.getCityVal()));
 
-			//模拟城市-联动/搜索/键盘操作
+			// 模拟城市-联动/搜索/键盘操作
 			$('#city-picker-search').cityPicker({
 				dataJson: cityData,
 				renderMode: true,
@@ -155,6 +147,7 @@
 			// 城市选择的回调
 			$('#city-picker-search').on('choose-district.citypicker', function(event, tagert, values) {
 				console.log(values);
+				console.log('原生-'+ JSON.stringify(select.getCityVal()));
 			});
 
 			//原生城市-联动
@@ -164,19 +157,11 @@
 				autoSelected: true
 			});
 
-			//设置城市
-			select.setCityVal([{
-				'id': '140000',
-				'name': '山西省'
-			}, {
-				'id': '140100',
-				'name': '太原市'
-			}, {
-				'id': '140105',
-				'name': '小店区'
-			}]);
+			// 设置城市
+			select.setCityVal('山西省, 太原市, 小店区');
 
-			console.log(select.getCityVal())
+			// 获取城市
+			console.log('原生-'+ JSON.stringify(select.getCityVal()));
 
 		});
 	</script>

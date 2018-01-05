@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-1.1.5
+ * v-1.1.6
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
@@ -8,7 +8,7 @@
  * autoSelected     [Boolean]                   是否自动选择第一项，默认(true)
  * renderMode		[Boolean]					是模拟的还是原生的;只在type是selector才有效,默认是(true)模拟
  * keyboard         [Boolean]                   是否开启键盘操作事件，默认(false)
- * code				[Boolean]					是否输出城市区号值，默认(false)，开启就是传字段名('code')
+ * code				[Boolean]					是否输出城市区号值，默认(false)，开启就是传字段名('cityCode')
  * search           [Boolean]                   是否开启搜索功能，默认（true）
  * level			[Number]					多少列  默认是一列/级 (3)
  * onInitialized	[Attachable]				组件初始化后触发的回调函数
@@ -140,12 +140,13 @@
                 autoSelectedStr = !config.autoSelected ? placeStr : effect.montage.apply(self, [config.dataJson, id]),
                 $storey = $selector.find('.storey').eq(index + 1),
                 $listing = $selector.find('.listing').eq(index + 1),
-                values = { 'id': id || '0', 'name': name };
+                values = { 'id': id || '0', 'name': name, 'cityCode': code || '' };
 
             // 存储选择的值
             if (index === 0) {
                 self.province = '';
                 self.province = values;
+                self.values = [];
             } else if (index === 1) {
                 self.city = '';
                 self.city = values;
@@ -159,6 +160,7 @@
 
             //赋值给隐藏域-区号
             $selector.find('[role="code"]').val(code);
+            self.cityCode = code;
 
             if (config.renderMode) {
                 
@@ -287,6 +289,32 @@
             $target.find('ul').animate({
                 scrollTop: dy + ch - oh + sy
             }, 200);
+        },
+        evaluation: function (arr) {
+            var self = this,
+                config = self.options,
+                $selector = self.$selector;
+
+            // 清空原本的值
+            self.values = [];
+            // 循环拿到对应的级城市赋值
+            $.each(arr, function (item, value) {
+                var $original = $selector.find('.'+grade[item]);
+                var $forward = $selector.find('.'+grade[item+1]);
+
+                if (config.renderMode) {
+                    $original.find('.reveal').text(value.name).removeClass('df-color forbid').siblings('.input-price').val(value.id);
+
+                    $forward.find('ul').html(effect.montage.apply(self, [config.dataJson, value.id]));
+                    $original.find('.caller[data-id="'+value.id+'"]').addClass('active');
+                } else {
+                    $forward.html(effect.montage.apply(self, [config.dataJson, value.id]));
+                    $original.find('.caller[data-id="'+value.id+'"]').prop('selected', true);
+                }
+
+                // 存储选择的值
+                self.values.push({ 'id': value.id, 'name': value.name, 'cityCode': value.cityCode });
+            });
         }
     };
 
@@ -368,41 +396,40 @@
         },
         setCityVal: function (val) {
             var self = this,
-                config = self.options,
-                arrayVal = val;
+                arrayVal = val.split(/\,\s|\,/g),
+                result = [], resultArray, filterArray = [], id;
 
-            self.values = [];
-
+            // 处理传入的城市数组，然后去查找相同的名称，存储到新的数组上
             $.each(arrayVal, function (key, value) {
-                var $original = $selector.find('.'+grade[key]);
-                var $forward = $selector.find('.'+grade[key+1]);
-
-                if (config.renderMode) {
-                    $original.find('.reveal').text(value.name).removeClass('df-color forbid').siblings('.input-price').val(value.id);
-
-                    $forward.find('ul').html(effect.montage.apply(self, [config.dataJson, value.id]));
-                    $original.find('.caller[data-id="'+value.id+'"]').addClass('active');
-                } else {
-                    $forward.html(effect.montage.apply(self, [config.dataJson, value.id]));
-                    $original.find('.caller[data-id="'+value.id+'"]').prop('selected', true);
-                }
-
-                // 存储选择的值
-                self.values.push({ 'id': value.id, 'name': value.name });
-                
+                // 循环数据，去拿到对应的城市名称，存储到新的数组去
+                $.each(self.options.dataJson, function (item, val) {
+                    if (value === val.name) {
+                        result.push(val);
+                    }
+                });
             });
+            // 反向排序数组
+            resultArray = $.unique(result.reverse());
+            // 截取数组第一个ID的前两个字符
+            id = resultArray[0].id.substring(0, 2);
+            // 循环排序好的数组，筛选出最终的结果
+            $.each(resultArray, function (si, sv) {
+                if (sv.id.indexOf(id) > -1) {
+                    filterArray.push(sv);
+                }
+            });
+            // 设置默认值
+            effect.evaluation.apply(self, [filterArray]);            
         },
         getCityVal: function () {
-            var self = this,
-                $selector = self.$selector,
-                id = $selector;
+            var cityArray = [];
 
-            if (self.province) {
-                self.values = [];
-                self.values.push(self.province, self.city, self.district);
+            // 如果是选择的就用选择
+            if (this.province) {
+                cityArray.push(this.province, this.city, this.district);
             }
-            
-            return self.values;
+
+            return this.province ? cityArray : this.values;
         },
         changeStatus: function (status) {
             var self = this,
