@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-1.1.6
+ * v-1.1.7
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
@@ -403,13 +403,15 @@
             $.each(arrayVal, function (key, value) {
                 // 循环数据，去拿到对应的城市名称，存储到新的数组去
                 $.each(self.options.dataJson, function (item, val) {
-                    if (value === val.name) {
+                    if (val.parentId === '100000' && value === val.name) {
+                        result.push(val);
+                    } else if (value === val.name) {
                         result.push(val);
                     }
                 });
             });
             // 反向排序数组
-            resultArray = $.unique(result.reverse());
+            resultArray = $.unique(result[0].parentId === '100000' ? result.reverse() : result.sort());
             // 截取数组第一个ID的前两个字符
             id = resultArray[0].id.substring(0, 2);
             // 循环排序好的数组，筛选出最终的结果

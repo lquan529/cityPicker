@@ -163,6 +163,9 @@ unBindEvent()
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
+- 2018.1.17 —— 版本更新为: v1.1.7  
+修复setCityVal()设置城市参数反过来的问题
+
 - 2018.1.5 —— 版本更新为: v1.1.6 
 修复了getCityVal()，获取的值还是上次的问题  
 重新优化了setCityVal()，让设置默认值变得简单

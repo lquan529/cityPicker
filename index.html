@@ -9,86 +9,17 @@
 
 <body>
 	<h2>模拟城市-无联动/无搜索</h2>
-	<div class="city-picker-selector" id="city-picker-selector">
-		<div class="selector-item storey province">
-			<a href="javascript:;" class="selector-name reveal">北京市</a>
-			<input type="hidden" name="userProvinceId" class="input-price val-error" value="110000" data-required="userProvinceId">
-			<div class="selector-list listing hide">
-				<ul>
-					<li>北京市</li>
-					<li>天津市</li>
-					<li>河北省</li>
-					<li>山西省</li>
-				</ul>
-			</div>
-		</div>
-		<div class="selector-item storey city">
-			<a href="javascript:;" class="selector-name reveal">北京市</a>
-			<input type="hidden" name="userCityId" class="input-price val-error" value="110100" data-required="userCityId">
-			<div class="selector-list listing hide">
-				<ul>
-					<li>北京市</li>
-				</ul>
-			</div>
-		</div>
-		<div class="selector-item storey district">
-			<a href="javascript:;" class="selector-name reveal">海淀区</a>
-			<input type="hidden" name="userDistrictId" class="input-price val-error" value="110108" data-required="userDistrictId">
-			<div class="selector-list listing hide">
-				<ul>
-					<li>东城区</li>
-					<li>西城区</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<!-- end .city-picker-selector -->
+	<div class="city-picker-selector" id="city-picker-selector"></div><!-- end .city-picker-selector -->
 
 	<h2>模拟城市-联动/搜索/键盘操作</h2>
-	<div class="city-picker-selector" id="city-picker-search">
-		<div class="selector-item storey province">
-			<a href="javascript:;" class="selector-name reveal df-color ">请选择省份</a>
-			<input type="hidden" name="userProvinceId" class="input-price val-error" value="" data-required="userProvinceId">
-			<div class="selector-list listing hide">
-				<div class="selector-search">
-					<input type="text" class="input-search" value="" placeholder="拼音、中文搜索">
-				</div>
-				<ul>
-					<li>北京市</li>
-					<li>天津市</li>
-				</ul>
-			</div>
-		</div>
-		<div class="selector-item storey city">
-			<a href="javascript:;" class="selector-name reveal df-color forbid">请选择城市</a>
-			<input type="hidden" name="userCityId" class="input-price val-error" value="" data-required="userCityId">
-			<div class="selector-list listing hide">
-				<div class="selector-search">
-					<input type="text" class="input-search" value="" placeholder="拼音、中文搜索">
-				</div>
-				<ul></ul>
-			</div>
-		</div>
-		<div class="selector-item storey district">
-			<a href="javascript:;" class="selector-name reveal df-color forbid">请选择区县</a>
-			<input type="hidden" name="userDistrictId" class="input-price val-error" value="" data-required="userDistrictId">
-			<div class="selector-list listing hide">
-				<div class="selector-search">
-					<input type="text" class="input-search" value="" placeholder="拼音、中文搜索">
-				</div>
-				<ul></ul>
-			</div>
-		</div>
-	</div>
-	<!-- end .city-picker-selector -->
+	<div class="city-picker-selector" id="city-picker-search"></div><!-- end .city-picker-selector -->
 
 	<h2>原生城市-联动</h2>
-	<div class="city-picker-select"></div>
-	<!-- end .city-picker-select -->
+	<div class="city-picker-select"></div><!-- end .city-picker-select -->
 
 	<script src="https://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
 	<script type="text/javascript" src="js/citydata.min.js"></script>
-	<script type="text/javascript" src="js/cityPicker-1.1.6.js"></script>
+	<script type="text/javascript" src="js/cityPicker-1.1.7.js"></script>
 	<script type="text/javascript">
 		$(function () {
 
