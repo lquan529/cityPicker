@@ -397,31 +397,21 @@
         setCityVal: function (val) {
             var self = this,
                 arrayVal = val.split(/\,\s|\,/g),
-                result = [], resultArray, filterArray = [], id;
+                result = [], resultArray;
 
             // 处理传入的城市数组，然后去查找相同的名称，存储到新的数组上
             $.each(arrayVal, function (key, value) {
                 // 循环数据，去拿到对应的城市名称，存储到新的数组去
                 $.each(self.options.dataJson, function (item, val) {
-                    if (val.parentId === '100000' && value === val.name) {
-                        result.push(val);
-                    } else if (value === val.name) {
+                    if (value === val.name) {
                         result.push(val);
                     }
                 });
             });
             // 反向排序数组
             resultArray = $.unique(result[0].parentId === '100000' ? result.reverse() : result.sort());
-            // 截取数组第一个ID的前两个字符
-            id = resultArray[0].id.substring(0, 2);
-            // 循环排序好的数组，筛选出最终的结果
-            $.each(resultArray, function (si, sv) {
-                if (sv.id.indexOf(id) > -1) {
-                    filterArray.push(sv);
-                }
-            });
             // 设置默认值
-            effect.evaluation.apply(self, [filterArray]);            
+            effect.evaluation.apply(self, [resultArray]);            
         },
         getCityVal: function () {
             var cityArray = [];
