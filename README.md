@@ -2,7 +2,7 @@
 cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
-- 1.1.7
+- 1.1.8
 
 ## 功能支持
 - 支持联动
@@ -31,6 +31,7 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 | onInitialized | Attachable | function(){} | 组件初始化后触发的回调函数 |
 | onClickBefore | Attachable | function(){} | 组件点击显示列表触发的回调函数(除原生select) |
 | onForbid | Attachable | function(){} | 存在class名forbid的只读点击的回调(状态为readonly) |
+| onChoiceEnd | Attachable | function(){} | 选择结束后执行的回调
 
 ## 使用方法
 #### 引入相关文件：
@@ -38,7 +39,7 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 <link rel="stylesheet" type="text/css" href="css/city-picker.css">
 <script src="https://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
 <script type="text/javascript" src="js/citydata.js"></script>
-<script type="text/javascript" src="js/cityPicker-1.1.6.js"></script>
+<script type="text/javascript" src="js/cityPicker-1.1.8.js"></script>
 ```
 
 #### HTML
@@ -163,6 +164,11 @@ unBindEvent()
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
+- 2018.1.19 —— 版本更新为: v1.1.8  
+修复setCityVal()在jquery 1.10.0版本以下城市显示正常的，而1.11.0版本以上显示是反向的问题  
+重新优化了getCityVal()选择后取值还是原来旧的值得问题  
+增加一个新的回调onChoiceEnd，作用是城市选择后，再执行的回调函数
+
 - 2018.1.17 —— 版本更新为: v1.1.7  
 修复setCityVal()设置城市参数反过来的问题
 

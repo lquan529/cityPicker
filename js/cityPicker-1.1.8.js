@@ -14,6 +14,7 @@
  * onInitialized	[Attachable]				组件初始化后触发的回调函数
  * onClickBefore	[Attachable]				组件点击显示列表触发的回调函数(除原生select)
  * onForbid         [Attachable]                存在class名forbid的禁止点击的回调
+ * onChoiceEnd      [Attachable]                选择结束后执行的回调
  * choose-xx		[Attachable]				点击组件选项后触发的回调函数 xx(级名称/province/city/district)是对应的级的回调
  */
 
@@ -45,6 +46,7 @@
         level: 3,
         onInitialized: function () {},
         onClickBefore: function () {},
+        onChoiceEnd: function () {},
         onForbid: function () {}
     };
 
@@ -143,44 +145,39 @@
                 values = { 'id': id || '0', 'name': name, 'cityCode': code || '' };
 
             // 存储选择的值
-            if (index === 0) {
-                self.province = '';
-                self.province = values;
-                self.values = [];
-            } else if (index === 1) {
-                self.city = '';
-                self.city = values;
-            } else if (index === 2) {
-                self.district = '';
-                self.district = values;
+            if (self.values.length > 0) {
+                // 判断如果是values 有值，就根据选择的列去替换成新的选择值
+                self.values.splice(index, config.level - 1, values);
+            } else {
+                // values 没有值就直接添加
+                self.values.push(values);
             }
-
             //选择选项后触发自定义事件choose(选择)事件
             $selector.trigger('choose-' + grade[index] +'.citypicker', [$target, values]);
-
             //赋值给隐藏域-区号
             $selector.find('[role="code"]').val(code);
             self.cityCode = code;
-
+            // 判断类型
             if (config.renderMode) {
-                
                 config.search ? $parent.find('.input-search').blur() : '';
-
                 //给选中的级-添加值和文字
                 $parent.siblings('.reveal').removeClass('df-color forbid').text(name).siblings('.input-price').val(storage);
                 $listing.data('id', id).find('ul').html(autoSelectedStr).find('.caller').eq(0).trigger('click');
-
+                // 判断是否有开启自动填写功能
                 if (!config.autoSelected) {
                     $storey.find('.reveal').text(placeholder).addClass('df-color').siblings('.input-price').val('');
                     $listing.find('.caller').eq(0).remove();
                 }
-
                 //模拟: 添加选中的样式
                 $parent.find('.caller').removeClass('active');
                 $target.addClass('active');
             } else {
                 //原生: 下一级附上对应的城市选项，执行点击事件
 				$target.next().html(autoSelectedStr).trigger('change').find('.caller').eq(0).prop('selected', true);
+            }
+            // 选择完后执行的回调
+            if (config.level - 1  === index) {
+                config.onChoiceEnd.apply(self);
             }
         },
         show: function (event) {
@@ -190,7 +187,6 @@
 
             $selector.find('.listing').addClass('hide');
             $target.siblings('.listing').removeClass('hide').find('.input-search').focus();
-
             //点击的回调函数
             config.onClickBefore.call($target);
         },
@@ -218,7 +214,6 @@
             if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 37 || keycode === 39 || keycode === 91 || keycode === 93) {
                 return false;
             }
-
             //如果不是按下enter/上下键的就做搜索事情
             if (keycode !== 13 && keycode !== 38 && keycode !== 40) {
                 $.each(this.options.dataJson, function(key, value) {
@@ -408,20 +403,14 @@
                     }
                 });
             });
+            
             // 反向排序数组
-            resultArray = $.unique(result[0].parentId === '100000' ? result.reverse() : result.sort());
+            resultArray = result[0].parentId === '100000' ? result.sort() : result.reverse();
             // 设置默认值
-            effect.evaluation.apply(self, [resultArray]);            
+            effect.evaluation.apply(self, [resultArray]);    
         },
         getCityVal: function () {
-            var cityArray = [];
-
-            // 如果是选择的就用选择
-            if (this.province) {
-                cityArray.push(this.province, this.city, this.district);
-            }
-
-            return this.province ? cityArray : this.values;
+            return this.values;
         },
         changeStatus: function (status) {
             var self = this,

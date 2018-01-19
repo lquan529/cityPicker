@@ -11,27 +11,29 @@
 	<h2>模拟城市-无联动/无搜索</h2>
 	<div class="city-picker-selector" id="city-picker-selector"></div><!-- end .city-picker-selector -->
 
-	<h2>模拟城市-联动/搜索/键盘操作</h2>
+	<h2>模拟城市-联动/搜索/键盘操作/二级城市</h2>
 	<div class="city-picker-selector" id="city-picker-search"></div><!-- end .city-picker-selector -->
 
 	<h2>原生城市-联动</h2>
 	<div class="city-picker-select"></div><!-- end .city-picker-select -->
 
-	<script src="https://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
+	<a href="https://github.com/lquan529/cityPicker" target="_blank" class="github">github</a>
+
+	<script src="https://cdn.bootcss.com/jquery/1.10.0/jquery.js"></script>
 	<script type="text/javascript" src="js/citydata.min.js"></script>
-	<script type="text/javascript" src="js/cityPicker-1.1.7.js"></script>
+	<script type="text/javascript" src="js/cityPicker-1.1.8.js"></script>
 	<script type="text/javascript">
 		$(function () {
 
 			// 模拟城市-无联动/无搜索
-			var selector = $('#city-picker-selector').cityPicker({
+			var selector1 = $('#city-picker-selector').cityPicker({
 				dataJson: cityData,
 				renderMode: true,
 				search: false,
 				autoSelected: false,
 				code: 'cityCode',
-				onForbid: function() {
-					console.log(this)
+				onChoiceEnd: function() {
+					console.log(this.values)
 				}
 			});
 
@@ -51,18 +53,23 @@
 			});
 
 			// 设置城市
-			selector.setCityVal('广东省, 广州市, 天河区');
+			selector1.setCityVal('广东省, 广州市, 天河区');
+			//selector.setCityVal('天河区, 广州市, 广东省');
 
 			// 获取值
-			console.log('模拟-'+ JSON.stringify(selector.getCityVal()));
+			console.log('模拟-'+ JSON.stringify(selector1.getCityVal()));
 
 			// 模拟城市-联动/搜索/键盘操作
-			$('#city-picker-search').cityPicker({
+			var selector2 = $('#city-picker-search').cityPicker({
 				dataJson: cityData,
 				renderMode: true,
 				search: true,
 				autoSelected: true,
-				keyboard: true
+				keyboard: true,
+				level: 2,
+				onChoiceEnd: function() {
+					console.log(this.values)
+				}
 			});
 
 			// 省份选择的回调
@@ -78,14 +85,16 @@
 			// 城市选择的回调
 			$('#city-picker-search').on('choose-district.citypicker', function(event, tagert, values) {
 				console.log(values);
-				console.log('原生-'+ JSON.stringify(select.getCityVal()));
 			});
 
 			//原生城市-联动
 			var select = $('.city-picker-select').cityPicker({
 				dataJson: cityData,
 				renderMode: false,
-				autoSelected: true
+				autoSelected: true,
+				onChoiceEnd: function() {
+					console.log(this.values)
+				}
 			});
 
 			// 设置城市
