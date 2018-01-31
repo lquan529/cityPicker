@@ -54,7 +54,6 @@
         this.options = $.extend({}, defaults, options);
         this.$selector = $selector = $(selector);
         this.values = [];
-        this.province = this.city = this.district = '';
 
         this.init();
         this.bindEvent();
@@ -113,7 +112,7 @@
                     selectemplet += '<div class="selector-item storey ' + citygrade + '" data-index="' + i + '">'
                         +'<a href="javascript:;" class="selector-name reveal df-color ' + forbid + '">' + placeholder + '</a>'
                         +'<input type=hidden name="' + field + '" class="input-price val-error" value="" data-required="' + field + '">'
-                        +'<div class="selector-list listing hide">'+ searchStr +'<ul></ul></div>'
+                        +'<div class="selector-list listing">'+ searchStr +'<ul></ul></div>'
                     +'</div>';
                 } else {
                     //原生
@@ -182,11 +181,17 @@
         },
         show: function (event) {
             var config = this.options,
-                $target = $(event);
+                $target = $(event),
+                $parent = $target.parent();
             $selector = this.$selector;
 
-            $selector.find('.listing').addClass('hide');
-            $target.siblings('.listing').removeClass('hide').find('.input-search').focus();
+            $parent.addClass('selector-show').siblings('.selector-item').removeClass('selector-show');
+            // 判断是否开启搜索，是就获取搜索框焦点
+            if (config.search) {
+                setTimeout(function() {
+                    $parent.find('.input-search').focus();
+                }, 400);
+            }
             //点击的回调函数
             config.onClickBefore.call($target);
         },
@@ -196,7 +201,7 @@
 
             effect.obtain.call(this, $target);
 
-            $selector.find('.listing').addClass('hide');
+            $selector.find('.selector-item').removeClass('selector-show');
 
             return false;
         },
@@ -431,7 +436,7 @@
     //模拟：执行点击区域外的就隐藏列表;
 	$(document).on('click.citypicker', function (event){
 		if($selector && $selector.find(event.target).length < 1) {
-			$selector.find('.listing').addClass('hide');
+			$selector.find('.selector-item').removeClass('selector-show');
 		}
     });
 
