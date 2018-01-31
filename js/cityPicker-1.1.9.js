@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-1.1.7
+ * v-1.1.9
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
