@@ -10,6 +10,8 @@
  * keyboard         [Boolean]                   是否开启键盘操作事件，默认(false)
  * code				[Boolean]					是否输出城市区号值，默认(false)，开启就是传字段名('cityCode')
  * search           [Boolean]                   是否开启搜索功能，默认（true）
+ * searchNotStr     [String]                    没有搜索到的提示语
+ * streetUrl        [String]                    街道数据的地址。可以用本地地址或者用'http://passer-by.com/data_location/town/{json}.json'
  * level			[Number]					多少列  默认是一列/级 (3)
  * onInitialized	[Attachable]				组件初始化后触发的回调函数
  * onClickBefore	[Attachable]				组件点击显示列表触发的回调函数(除原生select)
@@ -46,6 +48,7 @@
         code: false,
         search: true,
         searchNotStr: '查找不到{city}相关城市~',
+        streetUrl: 'town/{json}.json',
         level: 3,
         onInitialized: function () {},
         onClickBefore: function () {},
@@ -446,7 +449,7 @@
             // 没有ID值就不做以下事情
             if (!id) { return false; }
             // 取街道级数据
-            $.getJSON('//passer-by.com/data_location/town/'+ id +'.json', function (data) {
+            $.getJSON(config.streetUrl.replace('{json}', id), function (data) {
                 // 重新拼接新的数据
                 $.each(data, function (key, value) {
                     reults.push({ 'id': key, 'parentId': id, 'name': value, 'cityCode': '' });
