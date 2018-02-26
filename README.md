@@ -2,12 +2,13 @@
 cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
-- 1.1.9
+- 2.0.0
 
 ## 功能支持
 - 支持联动
 - 支持搜索功能
 - 支持键盘选择功能
+- 支持四级城市
 
 ## 浏览器支持
 - Internet Explorer 7+
@@ -39,7 +40,7 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 <link rel="stylesheet" type="text/css" href="css/city-picker.css">
 <script src="https://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
 <script type="text/javascript" src="js/citydata.js"></script>
-<script type="text/javascript" src="js/cityPicker-1.1.9.js"></script>
+<script type="text/javascript" src="js/cityPicker-2.0.0.js"></script>
 ```
 
 #### HTML
@@ -124,8 +125,13 @@ $('#city-picker-selector').on('choose-city.citypicker', function(event, tagert, 
     console.log(values);
 });
 
-// 城市选择的回调
+// 区县选择的回调
 $('#city-picker-selector').on('choose-district.citypicker', function(event, tagert, values) {
+    console.log(values);
+});
+
+// 街道选择的回调
+$('#city-picker-selector').on('choose-street.citypicker', function(event, tagert, values) {
     console.log(values);
 });
 ```
@@ -150,7 +156,7 @@ changeStatus(status)
 
 | 参数 | 类型 | 描述 |
 | --------   | -----:  | :----:  |
-| status | String | 参数readonly或者disabled |
+| status | String | 参数disabled、current |
 
 `注意：原生select是没有readonly的，如果设置这个是不起作用`
 
@@ -164,6 +170,10 @@ unBindEvent()
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
+- 2018.2.26 —— 版本更新为: v2.0.0  
+增加四级(街道)城市联动，插件代码逻辑优化以适应扩展到四级  
+注意：第四级街道数据是用getJson的方式去获取的，不加在原来的数据源上
+
 - 2018.1.31 —— 版本更新为: v1.1.9  
 样式优化，组件的一些逻辑调整
 

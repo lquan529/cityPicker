@@ -8,59 +8,199 @@
 </head>
 
 <body>
-	<h2>模拟城市-无联动/无搜索</h2>
-	<div class="city-picker-selector" id="city-picker-selector"></div><!-- end .city-picker-selector -->
+	<div class="container">
+		<h3>模拟城市-不自动选择第一项/无搜索/四级城市</h3>
+		<div class="dome-main">
+			<div class="city-picker-selector" id="city-picker-selector1"></div><!-- end .city-picker-selector -->
+			<div class="btn-cont">
+				<button class="btn btn-setcity">设置城市</button>
+				<button class="btn btn-bg-1 btn-obtain">获取城市</button>
+				<button class="btn btn-bg-2 btn-prohibit">禁止状态</button>
+				<button class="btn btn-bg-3 btn-current">可用状态</button>
+			</div><!-- end .btn-cont -->
+			<div class="code">
+				<a href="javascript:;" class="show-code">code</a>
+				<pre><code>var selector1 = $('#city-picker-selector1').cityPicker({
+					dataJson: cityData,
+					renderMode: true,
+					search: false,
+					autoSelected: false,
+					code: 'cityCode',
+					level: 4,
+					onChoiceEnd: function() {
+						console.log(this.values)
+					}
+				});
 
-	<h2>模拟城市-联动/搜索/键盘操作/二级城市</h2>
-	<div class="city-picker-selector" id="city-picker-search"></div><!-- end .city-picker-selector -->
+				// 设置城市
+				selector1.setCityVal('广东省, 广州市, 天河区, 天园街道');
 
-	<h2>原生城市-联动</h2>
-	<div class="city-picker-select"></div><!-- end .city-picker-select -->
+				// 省份选择的回调
+				$('#city-picker-selector1').on('choose-province.citypicker', function(event, tagert, values) {
+					console.log(values);
+				});
+	
+				// 城市选择的回调
+				$('#city-picker-selector1').on('choose-city.citypicker', function(event, tagert, values) {
+					console.log(values);
+				});
+	
+				// 区县选择的回调
+				$('#city-picker-selector1').on('choose-district.citypicker', function(event, tagert, values) {
+					console.log(values);
+				});
 
-	<a href="https://github.com/lquan529/cityPicker" target="_blank" class="github">github</a>
+				// 街道选择的回调
+				$('#city-picker-selector1').on('choose-street.citypicker', function(event, tagert, values) {
+					console.log(values);
+				});</code></pre>
+			</div><!-- end .code -->
+		</div><!-- end .dome-main -->
+
+		<h3>模拟城市-自动选择第一项/无搜索/三级城市</h3>
+		<div class="dome-main">
+			<div class="city-picker-selector" id="city-picker-selector2"></div><!-- end .city-picker-selector -->
+			<div class="code">
+				<a href="javascript:;" class="show-code">code</a>
+				<pre><code>var selector2 = $('#city-picker-selector2').cityPicker({
+					dataJson: cityData,
+					renderMode: true,
+					search: false,
+					autoSelected: true,
+					code: 'cityCode',
+					level: 3,
+					onChoiceEnd: function() {
+						console.log(this.values)
+					}
+				});
+	
+				// 设置城市
+				selector2.setCityVal('广东省, 广州市, 天河区');</code></pre>
+			</div><!-- end .code -->
+		</div><!-- end .dome-main -->
+
+		<h3>模拟城市-联动/搜索/键盘操作/二级城市</h3>
+		<div class="dome-main">
+			<div class="city-picker-selector" id="city-picker-search"></div><!-- end .city-picker-selector -->
+			<div class="code">
+				<a href="javascript:;" class="show-code">code</a>
+				<pre><code>var selector3 = $('#city-picker-search').cityPicker({
+					dataJson: cityData,
+					renderMode: true,
+					search: true,
+					autoSelected: true,
+					keyboard: true,
+					level: 2,
+					onChoiceEnd: function() {
+						console.log(this.values)
+					}
+				});</code></pre>
+			</div><!-- end .code -->
+		</div><!-- end .dome-main -->
+
+		<h3>模拟城市-联动/搜索/键盘操作/一级城市</h3>
+		<div class="dome-main">
+			<div class="city-picker-selector" id="city-picker-search2"></div><!-- end .city-picker-selector -->
+			<div class="code">
+				<a href="javascript:;" class="show-code">code</a>
+				<pre><code>var selector4 = $('#city-picker-search2').cityPicker({
+					dataJson: cityData,
+					renderMode: true,
+					search: true,
+					autoSelected: true,
+					keyboard: true,
+					level: 1,
+					onChoiceEnd: function() {
+						console.log(this.values)
+					}
+				});</code></pre>
+			</div><!-- end .code -->
+		</div><!-- end .dome-main -->
+
+		<h3>原生城市-联动</h3>
+		<div class="dome-main">
+			<div class="city-picker-select"></div><!-- end .city-picker-select -->
+			<div class="code">
+				<a href="javascript:;" class="show-code">code</a>
+				<pre><code>var select = $('.city-picker-select').cityPicker({
+					dataJson: cityData,
+					renderMode: false,
+					autoSelected: true,
+					level: 4,
+					onChoiceEnd: function() {
+						console.log(this.values)
+					}
+				});
+	
+				// 设置城市
+				select.setCityVal('山西省, 太原市, 小店区, 坞城街道');</code></pre>
+			</div><!-- end .code -->
+		</div><!-- end .dome-main -->
+	</div><!-- end .container -->
 
 	<script src="https://cdn.bootcss.com/jquery/1.10.0/jquery.js"></script>
 	<script type="text/javascript" src="js/citydata.min.js"></script>
-	<script type="text/javascript" src="js/cityPicker-1.1.9.js"></script>
+	<script type="text/javascript" src="js/cityPicker-2.0.0.js"></script>
 	<script type="text/javascript">
 		$(function () {
+			// 显示代码
+			$('.show-code').on('click', function (event) {
+				var $this = $(this);
+
+				$this.next('pre').slideToggle(500);
+			});
 
 			// 模拟城市-无联动/无搜索
-			var selector1 = $('#city-picker-selector').cityPicker({
+			var selector1 = $('#city-picker-selector1').cityPicker({
 				dataJson: cityData,
 				renderMode: true,
 				search: false,
 				autoSelected: false,
 				code: 'cityCode',
+				level: 4,
 				onChoiceEnd: function() {
 					console.log(this.values)
 				}
 			});
 
-			// 省份选择的回调
-			$('#city-picker-selector').on('choose-province.citypicker', function(event, tagert, values) {
-				console.log(values);
+			// 设置城市
+			selector1.setCityVal('广东省, 广州市, 天河区, 天园街道');
+
+			$('.btn-setcity').on('click', function (event) {
+				selector1.setCityVal('广东省, 深圳市, 罗湖区, 桂园街道');
 			});
 
-			// 城市选择的回调
-			$('#city-picker-selector').on('choose-city.citypicker', function(event, tagert, values) {
-				console.log(values);
+			// 获取城市值
+			$('.btn-obtain').on('click', function (event) {
+				alert(JSON.stringify(selector1.getCityVal()));
 			});
 
-			// 城市选择的回调
-			$('#city-picker-selector').on('choose-district.citypicker', function(event, tagert, values) {
-				console.log(values);
+			$('.btn-prohibit').on('click', function (event) {
+				selector1.changeStatus('disabled');
+			});
+
+			$('.btn-current').on('click', function (event) {
+				selector1.changeStatus('current');
+			});
+
+			// 模拟城市-无联动/无搜索
+			var selector2 = $('#city-picker-selector2').cityPicker({
+				dataJson: cityData,
+				renderMode: true,
+				search: false,
+				autoSelected: true,
+				code: 'cityCode',
+				level: 3,
+				onChoiceEnd: function() {
+					console.log(this.values)
+				}
 			});
 
 			// 设置城市
-			selector1.setCityVal('广东省, 广州市, 天河区');
-			//selector.setCityVal('天河区, 广州市, 广东省');
-
-			// 获取值
-			console.log('模拟-'+ JSON.stringify(selector1.getCityVal()));
+			selector2.setCityVal('广东省, 广州市, 天河区');
 
 			// 模拟城市-联动/搜索/键盘操作
-			var selector2 = $('#city-picker-search').cityPicker({
+			var selector3 = $('#city-picker-search').cityPicker({
 				dataJson: cityData,
 				renderMode: true,
 				search: true,
@@ -72,19 +212,17 @@
 				}
 			});
 
-			// 省份选择的回调
-			$('#city-picker-search').on('choose-province.citypicker', function(event, tagert, values) {
-				console.log(values);
-			});
-
-			// 城市选择的回调
-			$('#city-picker-search').on('choose-city.citypicker', function(event, tagert, values) {
-				console.log(values);
-			});
-
-			// 城市选择的回调
-			$('#city-picker-search').on('choose-district.citypicker', function(event, tagert, values) {
-				console.log(values);
+			// 模拟城市-联动/搜索/键盘操作
+			var selector4 = $('#city-picker-search2').cityPicker({
+				dataJson: cityData,
+				renderMode: true,
+				search: true,
+				autoSelected: true,
+				keyboard: true,
+				level: 1,
+				onChoiceEnd: function() {
+					console.log(this.values)
+				}
 			});
 
 			//原生城市-联动
@@ -92,17 +230,14 @@
 				dataJson: cityData,
 				renderMode: false,
 				autoSelected: true,
+				level: 4,
 				onChoiceEnd: function() {
 					console.log(this.values)
 				}
 			});
 
 			// 设置城市
-			select.setCityVal('山西省, 太原市, 小店区');
-
-			// 获取城市
-			console.log('原生-'+ JSON.stringify(select.getCityVal()));
-
+			select.setCityVal('山西省, 太原市, 小店区, 坞城街道');
 		});
 	</script>
 </body>

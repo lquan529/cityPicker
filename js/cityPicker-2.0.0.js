@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-1.1.9
+ * v-2.0.0
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
@@ -15,25 +15,27 @@
  * onClickBefore	[Attachable]				组件点击显示列表触发的回调函数(除原生select)
  * onForbid         [Attachable]                存在class名forbid的禁止点击的回调
  * onChoiceEnd      [Attachable]                选择结束后执行的回调
- * choose-xx		[Attachable]				点击组件选项后触发的回调函数 xx(级名称/province/city/district)是对应的级的回调
+ * choose-xx		[Attachable]				点击组件选项后触发的回调函数 xx(级名称/province/city/district/street)是对应的级的回调
  */
 
 (function ($, window) {
     var $selector;
-    var grade = ['province', 'city', 'district'];
+    var grade = ['province', 'city', 'district', 'street'];
     var defaults = {
         dataJson: null,
-        selectpattern: [{
+        selectpattern: [
+            {
                 field: 'userProvinceId',
                 placeholder: '请选择省份'
-            },
-            {
+            }, {
                 field: 'userCityId',
                 placeholder: '请选择城市'
-            },
-            {
+            }, {
                 field: 'userDistrictId',
                 placeholder: '请选择区县'
+            }, {
+                field: 'userStreet',
+                placeholder: '请选择街道'
             }
         ],
         shorthand: false,
@@ -43,6 +45,7 @@
         keyboard: false,
         code: false,
         search: true,
+        searchNotStr: '查找不到{city}相关城市~',
         level: 3,
         onInitialized: function () {},
         onClickBefore: function () {},
@@ -86,8 +89,6 @@
                     }
                 }
             }
-
-            html = data.length > 0 && html ? html : '<li class="forbid">您查找的没有此城市...</li>';
 
             return html;
         },
@@ -136,12 +137,12 @@
                 name = config.renderMode ? $target.text() : $selected.text(),
                 storage = config.storage ? id : name, //存储的是数字还是中文
                 code = config.renderMode ? $target.data('code') : $selected.data('code'),
-                placeholder = index+1 < config.level ? config.selectpattern[index+1].placeholder : '',
-                placeStr = !config.renderMode ? '<option class="caller">'+placeholder+'</option>'+ effect.montage.apply(self, [config.dataJson, id]) : '<li class="caller hide">'+placeholder+'</li>'+ effect.montage.apply(self, [config.dataJson, id]),
-                autoSelectedStr = !config.autoSelected ? placeStr : effect.montage.apply(self, [config.dataJson, id]),
-                $storey = $selector.find('.storey').eq(index + 1),
+                $storey = $selector.find('.storey[data-index="'+ index +'"]'),
                 $listing = $selector.find('.listing').eq(index + 1),
-                values = { 'id': id || '0', 'name': name, 'cityCode': code || '' };
+                values = { 'id': id || '0', 'name': name, 'cityCode': code || '' },
+                aselectedIndex = config.autoSelected ? 1 : 0,
+                placeholder = config.selectpattern[index < 3 ? index + 1 : index].placeholder,
+                placeholderStr = !config.renderMode ? '<option class="caller" value="">'+placeholder+'</option>'+ effect.montage.apply(self, [config.dataJson, id]) : '<li class="caller">'+placeholder+'</li>'+ effect.montage.apply(self, [config.dataJson, id]);
 
             // 存储选择的值
             if (self.values.length > 0) {
@@ -158,21 +159,24 @@
             self.cityCode = code;
             // 判断类型
             if (config.renderMode) {
-                config.search ? $parent.find('.input-search').blur() : '';
                 //给选中的级-添加值和文字
-                $parent.siblings('.reveal').removeClass('df-color forbid').text(name).siblings('.input-price').val(storage);
-                $listing.data('id', id).find('ul').html(autoSelectedStr).find('.caller').eq(0).trigger('click');
-                // 判断是否有开启自动填写功能
-                if (!config.autoSelected) {
-                    $storey.find('.reveal').text(placeholder).addClass('df-color').siblings('.input-price').val('');
-                    $listing.find('.caller').eq(0).remove();
-                }
+                $storey.find('.reveal').removeClass('df-color forbid').text(name).siblings('.input-price').val(storage);
+                $listing.data('id', id).find('ul').html(placeholderStr);
+                index < 2 ? $listing.find('.caller').eq(aselectedIndex).trigger('click') : '';
+                $listing.find('.caller').eq(0).remove();
+                // 不是自动选择的事情
+                !config.autoSelected ? $selector.find('.reveal').eq(index + 1).addClass('df-color') : '';
                 //模拟: 添加选中的样式
                 $parent.find('.caller').removeClass('active');
                 $target.addClass('active');
             } else {
                 //原生: 下一级附上对应的城市选项，执行点击事件
-				$target.next().html(autoSelectedStr).trigger('change').find('.caller').eq(0).prop('selected', true);
+                $target.next().html(placeholderStr).find('.caller').eq(aselectedIndex).prop('selected', true);
+                index < 2 ? $target.next().trigger('change') : '';
+            }
+            // 开启四级联动，添加四级城市
+            if (config.level === 4 && index === 2) {
+                self.getStreet(id);
             }
             // 选择完后执行的回调
             if (config.level - 1  === index) {
@@ -213,7 +217,7 @@
                 inputVal = $target.val(),
                 id = $parent.data('id'),
                 keycode = event.keyCode,
-                result = [];
+                result = [], htmls;
 
             //如果是按下shift/ctr/左右/command键不做事情
             if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 37 || keycode === 39 || keycode === 91 || keycode === 93) {
@@ -227,8 +231,10 @@
                         result.push(value);
                     }
                 });
-
-                $parent.find('ul').html(effect.montage.apply(self, [result, id]));
+                // 搜索结果返回的html
+                htmls = effect.montage.apply(self, [result, id]);
+                // 插入到DOM去
+                $parent.find('ul').html(htmls ? htmls : '<li>'+ self.options.searchNotStr.replace('{city}', '<strong>'+ inputVal +'</strong>') +'</li>');
             }
         },
         operation: function (event) {
@@ -290,7 +296,7 @@
                 scrollTop: dy + ch - oh + sy
             }, 200);
         },
-        evaluation: function (arr) {
+        evaluation: function (arr, arrayVal) {
             var self = this,
                 config = self.options,
                 $selector = self.$selector;
@@ -301,7 +307,8 @@
             $.each(arr, function (item, value) {
                 var $original = $selector.find('.'+grade[item]);
                 var $forward = $selector.find('.'+grade[item+1]);
-
+                
+                // 两种方式
                 if (config.renderMode) {
                     $original.find('.reveal').text(value.name).removeClass('df-color forbid').siblings('.input-price').val(value.id);
 
@@ -315,6 +322,10 @@
                 // 存储选择的值
                 self.values.push({ 'id': value.id, 'name': value.name, 'cityCode': value.cityCode });
             });
+            // 开启四级联动，取四级城市数据
+            if (arr[2].id && config.level === 4) {
+                self.getStreet(arr[2].id, true, arrayVal[3] ? arrayVal[3] : '');
+            }
         }
     };
 
@@ -336,7 +347,6 @@
                 //原生>添加数据
                 $selector.find('.province').append(effect.montage.apply(self, [config.dataJson, '100000']));
             }
-
             //初始化后的回调函数
             config.onInitialized.call(self);
         },
@@ -349,27 +359,21 @@
                 event.preventDefault();
                 var $this = $(this);
 
-                if ($this.is('.forbid')) {
-
+                if ($this.is('.forbid, .disabled')) {
+                    // 禁止的回调函数
                     config.onForbid.call($this);
-
                     return false;
                 }
-
+                // 显示回调函数
                 effect.show.call(self, $this);
-
                 return false;
             });
-
             //点击选项事件
             $selector.on('click.citypicker', '.caller', $.proxy(effect.hide, self));
-
             //原生选择事件
             $selector.on('change.citypicker', 'select', $.proxy(effect.obtain, self));
-
             //文本框搜索事件
             $selector.on('keyup.citypicker', '.input-search', $.proxy(effect.search, self));
-
             //开启键盘操作
             if (config.keyboard) {
                 //键盘选择事件
@@ -380,17 +384,18 @@
             var self = this,
                 config = self.options;
 
+            // 处理原生
             if (!config.renderMode) {
                 $selector.off('change.citypicker', 'select');
                 return false;
             }
-
+            // 销毁展开列表事件
             $selector.off('click.citypicker', '.reveal');
-
+            // 销毁选择事件
             $selector.off('click.citypicker', '.caller');
-
+            // 销毁搜索事件
             $selector.off('keyup.citypicker', '.input-search');
-
+            // 销毁键盘事件
             $selector.off('keyup.citypicker', '.storey');
 
         },
@@ -408,11 +413,10 @@
                     }
                 });
             });
-            
             // 反向排序数组
             resultArray = result[0].parentId === '100000' ? result.sort() : result.reverse();
             // 设置默认值
-            effect.evaluation.apply(self, [resultArray]);    
+            effect.evaluation.apply(self, [resultArray, arrayVal]);    
         },
         getCityVal: function () {
             return this.values;
@@ -421,15 +425,55 @@
             var self = this,
                 config = self.options;
 
-            if (status === 'readonly') {
-                self.$selector.find('.reveal').addClass('forbid').siblings('.input-price').prop('readonly', true);
-            } else if (status === 'disabled') {
+            if (status === 'disabled') {
                 self.$selector.find('.reveal').addClass('disabled').siblings('.input-price').prop('disabled', true);
 
                 !config.renderMode ? self.$selector.find('select').prop('disabled', true) : '';
-            }
+            } else if (status === 'current') {
+                self.$selector.find('.reveal').removeClass('disabled forbid').siblings('.input-price').prop('disabled', false);
 
-            config.renderMode && status !== 'readonly' ? self.unBindEvent() : '';
+                !config.renderMode ? self.$selector.find('select').prop('disabled', false) : '';
+            }
+        },
+        getStreet: function (id, isSet, name) {
+            var self = this,
+                config = self.options,
+                $street= self.$selector.find('.street'),
+                placeholder = config.selectpattern[3].placeholder,
+                index = config.autoSelected ? 1 : 0,
+                reults = [], placeholderStr, autoSelectedStr;
+
+            // 没有ID值就不做以下事情
+            if (!id) { return false; }
+            // 取街道级数据
+            $.getJSON('//passer-by.com/data_location/town/'+ id +'.json', function (data) {
+                // 重新拼接新的数据
+                $.each(data, function (key, value) {
+                    reults.push({ 'id': key, 'parentId': id, 'name': value, 'cityCode': '' });
+                });
+                placeholderStr = !config.renderMode ? '<option class="caller" value="">'+placeholder+'</option>'+ effect.montage.apply(self, [reults, id]) : '<li class="caller">'+placeholder+'</li>'+ effect.montage.apply(self, [reults, id]);
+                // 数据转化，然后转成html插入到DOM里去
+                if (config.renderMode) {
+                    $street.find('ul').html(placeholderStr);
+                    // 如果是设置城市的就按照城市名称去选中，否则就选中第一项
+                    if (isSet) {
+                        $street.find('.caller[data-title="'+ name +'"]').trigger('click');
+                    } else {
+                        $street.find('.caller').eq(index).trigger('click');
+                    }
+                    $street.find('.caller').eq(0).remove();
+                    !isSet & !config.autoSelected ? $street.find('.reveal').addClass('df-color') : '';
+                } else {
+                    $street.html(placeholderStr);
+                    // 如果是设置城市的就按照城市名称去选中，否则就选中第一项
+                    if (isSet) {
+                        $street.find('.caller[data-title="'+ name +'"]').prop('selected', true);
+                    } else {
+                        $street.find('.caller').eq(index).prop('selected', true);
+                    }
+                    $street.trigger('change');
+                }
+            });
         }
     };
 
