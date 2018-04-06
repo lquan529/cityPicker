@@ -2,7 +2,7 @@
 cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
-- 2.0.0
+- 2.0.1
 
 ## 功能支持
 - 支持联动
@@ -40,7 +40,7 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 <link rel="stylesheet" type="text/css" href="css/city-picker.css">
 <script src="https://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
 <script type="text/javascript" src="js/citydata.js"></script>
-<script type="text/javascript" src="js/cityPicker-2.0.0.js"></script>
+<script type="text/javascript" src="js/cityPicker-2.0.1.js"></script>
 ```
 
 #### HTML
@@ -145,7 +145,10 @@ setCityVal(val)
 
 ```js
 var selector = $('#city-picker-selector').cityPicker();
-    selector.setCityVal('北京市, 北京市, 海淀区');
+    // 用name设置
+    selector.setCityVal('广东省, 广州市, 天河区');
+    // 用ID设置
+    selector.setCityVal('440000, 440100, 440106');
 ```
 
 ### 获取值
@@ -170,6 +173,10 @@ unBindEvent()
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
+- 2018.4.6 —— 版本更新为: v2.0.1  
+修复shorthand参数设置为简写的时候，四级城市报错问题  
+增加setCityVal接口设置城市可以支持Id和Name设置两种方式设置默认城市
+
 - 2018.2.26 —— 版本更新为: v2.0.0  
 增加四级(街道)城市联动，插件代码逻辑优化以适应扩展到四级  
 注意：第四级街道数据是用getJson的方式去获取的，不加在原来的数据源上
