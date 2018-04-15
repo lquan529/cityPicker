@@ -2,7 +2,7 @@
 cityPicker主要是用于PC的城市下拉选择插件，有selector和select两种应用场景模式。
 
 ## 版本
-- 2.0.1
+- 2.0.2
 
 ## 功能支持
 - 支持联动
@@ -40,7 +40,7 @@ cityPicker主要是用于PC的城市下拉选择插件，有selector和select
 <link rel="stylesheet" type="text/css" href="css/city-picker.css">
 <script src="https://cdn.bootcss.com/jquery/1.8.1/jquery.js"></script>
 <script type="text/javascript" src="js/citydata.js"></script>
-<script type="text/javascript" src="js/cityPicker-2.0.1.js"></script>
+<script type="text/javascript" src="js/cityPicker-2.0.2.js"></script>
 ```
 
 #### HTML
@@ -173,6 +173,9 @@ unBindEvent()
 [https://lquan529.github.io/cityPicker/](https://lquan529.github.io/cityPicker/)
 
 ## Log
+- 2018.4.15 —— 版本更新为: v2.0.2  
+增加setCityVal设置城市报错的问题
+
 - 2018.4.6 —— 版本更新为: v2.0.1  
 修复shorthand参数设置为简写的时候，四级城市报错问题  
 增加setCityVal接口设置城市可以支持Id和Name设置两种方式设置默认城市

@@ -1,6 +1,6 @@
 /**
  * cityPicker
- * v-2.0.1
+ * v-2.0.2
  * dataJson			[Json]						json数据，是html显示的列表数据
  * selectpattern	[Array]						用于存储的字段名和默认提示 { 字段名，默认提示 }
  * shorthand		[Boolean]					用于城市简写功能，默认是不开启(false)
@@ -327,7 +327,7 @@
                 self.values.push({ 'id': value.id, 'name': name, 'cityCode': value.cityCode });
             });
             // 开启四级联动，取四级城市数据
-            if (arr[2].id && config.level === 4) {
+            if (arr.length === 3 && config.level === 4) {
                 self.getStreet(arr[2].id, true, arrayVal[3] ? arrayVal[3] : '');
             }
         }
