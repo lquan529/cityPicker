@@ -140,7 +140,7 @@
 
 	<script src="https://cdn.bootcss.com/jquery/1.10.0/jquery.js"></script>
 	<script type="text/javascript" src="js/citydata.min.js"></script>
-	<script type="text/javascript" src="js/cityPicker-2.0.2.js"></script>
+	<script type="text/javascript" src="js/cityPicker-2.0.3.js"></script>
 	<script type="text/javascript">
 		$(function () {
 			// 显示代码
@@ -155,6 +155,7 @@
 				dataJson: cityData,
 				renderMode: true,
 				search: false,
+				storage: false,
 				autoSelected: false,
 				shorthand: true,
 				code: 'cityCode',
@@ -230,6 +231,7 @@
 			var select = $('.city-picker-select').cityPicker({
 				dataJson: cityData,
 				renderMode: false,
+				storage: false,
 				autoSelected: true,
 				level: 4,
 				onChoiceEnd: function() {
