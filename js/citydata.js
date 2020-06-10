@@ -19125,6 +19125,24 @@ var cityData = [
         "pinyin": "Shiqi"
     },
     {
+        "id": "442002",
+        "name": "东区",
+        "parentId": "442000",
+        "shortName": "东区",
+        "letter": "D",
+        "cityCode": "0760",
+        "pinyin": "Dongqu"
+    },
+    {
+        "id": "442003",
+        "name": "西区",
+        "parentId": "442000",
+        "shortName": "西区",
+        "letter": "X",
+        "cityCode": "0760",
+        "pinyin": "Xiqu"
+    },
+    {
         "id": "442004",
         "name": "南区",
         "parentId": "442000",
